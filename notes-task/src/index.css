@@ -1,23 +1,38 @@
-.search {
+.app .search {
   width: 40%;
   margin: 5% auto 2%;
 }
-.name {
+.app .name {
   margin: 3% auto;
 }
-.name .item {
+.app .name .item {
   display: flex;
   width: 40%;
   margin: 1% auto;
   margin-bottom: 0;
 }
-.name .item .note-name {
+.app .name .item i {
+  pointer-events: none;
+}
+.app .name .item .note-name {
   width: 75%;
 }
-.name .item .note-watch {
+.app .name .item .note-watch {
   width: 7%;
   margin-left: 3%;
 }
-.name .item span {
+.app .name .item span {
   margin-right: 1%;
+}
+.app .modal.show {
+  display: block;
+  top: 20%;
+}
+.app .modal.show input {
+  margin: 10px;
+  width: 97%;
+}
+.app .modal.show textarea {
+  margin: 10px;
+  width: 97%;
 }

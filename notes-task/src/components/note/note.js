@@ -1,6 +1,10 @@
 import React from 'react';
+import PropTypes from 'prop-types';
 
-function Note() {
+function Note(props) {
+  const {
+    name, id, tags, deleteNote,
+  } = props;
   return (
     <div className="name">
       <div className="item">
@@ -9,34 +13,55 @@ function Note() {
           className="btn btn-primary btn-lg note-name"
           disabled
         >
-          Primary button
+          {name}
         </button>
         <button
           type="button"
           className="btn btn-primary btn-lg note-watch"
+          name="watch"
+          id={id}
         >
           <i className="fa fa-eye" />
         </button>
         <button
           type="button"
           className="btn btn-primary btn-lg note-watch"
+          name="edit"
+          id={id}
         >
           <i className="fa fa-edit" />
         </button>
         <button
           type="button"
           className="btn btn-primary btn-lg note-watch"
+          name="trash"
+          id={id}
+          onClick={deleteNote}
         >
           <i className="fa fa-trash" />
         </button>
       </div>
       <div className="item">
-        <span className="badge badge-pill badge-primary">Primary</span>
-        <span className="badge badge-pill badge-primary">Primary</span>
-        <span className="badge badge-pill badge-primary">Primary</span>
+        {
+          tags.map((item, index) => {
+            const key = `tag-${id}-${index}`;
+            return (
+              <span className="badge badge-pill badge-primary" key={key}>
+                {item}
+              </span>
+            );
+          })
+        }
       </div>
     </div>
   );
 }
+
+Note.propTypes = {
+  name: PropTypes.string.isRequired,
+  id: PropTypes.number.isRequired,
+  tags: PropTypes.arrayOf(PropTypes.string).isRequired,
+  deleteNote: PropTypes.func.isRequired,
+};
 
 export default Note;
