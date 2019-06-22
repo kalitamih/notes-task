@@ -87,6 +87,24 @@ class App extends Component {
     });
   }
 
+  removeTag = (id, index) => {
+    const { notes } = this.state;
+    const { tags } = notes[parseInt(id, 10)];
+    console.log(index);
+    const newtags = tags.filter((item, num) => !(num === parseInt(index, 10)));
+    console.log(tags);
+    console.log(newtags);
+    const note = {
+      name: notes[parseInt(id, 10)].name,
+      text: notes[parseInt(id, 10)].text,
+      tags: newtags,
+    };
+    const array = [...notes.slice(0, parseInt(id, 10)), note, ...notes.slice(parseInt(id, 10) + 1)];
+    this.setState({
+      notes: array,
+    });
+  }
+
   render() {
     const {
       notes, showModal, watchMode,
@@ -107,6 +125,7 @@ class App extends Component {
                 key={key}
                 deleteNote={this.deleteNote}
                 showNote={this.showNote}
+                removeTag={this.removeTag}
               />
             );
           })

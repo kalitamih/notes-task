@@ -4,7 +4,7 @@ import PropTypes from 'prop-types';
 function Note(props) {
   const {
     name, id, tags,
-    deleteNote, showNote,
+    deleteNote, showNote, removeTag,
   } = props;
   return (
     <div className="name">
@@ -23,7 +23,7 @@ function Note(props) {
           id={id}
           onClick={event => showNote(event, true)}
         >
-          <i className="fa fa-eye" />
+          <i className="fa fa-eye" id={id} />
         </button>
         <button
           type="button"
@@ -32,7 +32,7 @@ function Note(props) {
           id={id}
           onClick={event => showNote(event, false)}
         >
-          <i className="fa fa-edit" />
+          <i className="fa fa-edit" id={id} />
         </button>
         <button
           type="button"
@@ -41,7 +41,7 @@ function Note(props) {
           id={id}
           onClick={deleteNote}
         >
-          <i className="fa fa-trash" />
+          <i className="fa fa-trash" id={id} />
         </button>
       </div>
       <div className="item">
@@ -51,10 +51,20 @@ function Note(props) {
             return (
               <span className="badge badge-pill badge-primary" key={key}>
                 {item}
+                &nbsp;
+                <i
+                  className="fa fa-times-circle"
+                  name={index}
+                  onClick={() => removeTag(id, index)}                  
+                />
               </span>
             );
           })
         }
+        <span className="badge badge-pill badge-primary">
+          Add tag
+          &nbsp;
+        </span>
       </div>
     </div>
   );
@@ -66,6 +76,7 @@ Note.propTypes = {
   tags: PropTypes.arrayOf(PropTypes.string).isRequired,
   deleteNote: PropTypes.func.isRequired,
   showNote: PropTypes.func.isRequired,
+  removeTag: PropTypes.func.isRequired,
 };
 
 export default Note;

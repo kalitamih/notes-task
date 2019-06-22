@@ -15,9 +15,6 @@
   margin: 1% auto;
   margin-bottom: 0;
 }
-.app .name .item i {
-  pointer-events: none;
-}
 .app .name .item .note-name {
   width: 75%;
 }
