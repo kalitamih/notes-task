@@ -3,7 +3,8 @@ import PropTypes from 'prop-types';
 
 function Note(props) {
   const {
-    name, id, tags, deleteNote,
+    name, id, tags,
+    deleteNote, showNote,
   } = props;
   return (
     <div className="name">
@@ -20,6 +21,7 @@ function Note(props) {
           className="btn btn-primary btn-lg note-watch"
           name="watch"
           id={id}
+          onClick={event => showNote(event, true)}
         >
           <i className="fa fa-eye" />
         </button>
@@ -28,6 +30,7 @@ function Note(props) {
           className="btn btn-primary btn-lg note-watch"
           name="edit"
           id={id}
+          onClick={event => showNote(event, false)}
         >
           <i className="fa fa-edit" />
         </button>
@@ -62,6 +65,7 @@ Note.propTypes = {
   id: PropTypes.number.isRequired,
   tags: PropTypes.arrayOf(PropTypes.string).isRequired,
   deleteNote: PropTypes.func.isRequired,
+  showNote: PropTypes.func.isRequired,
 };
 
 export default Note;

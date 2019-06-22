@@ -4,30 +4,44 @@ import PropTypes from 'prop-types';
 function Modal(props) {
   const {
     show, watch, name, text,
+    closeNote, handleInput, handleSubmit,
   } = props;
   const modalClass = show ? 'modal show' : 'modal fade';
   return (
-    <div className={modalClass} tabIndex="-1" role="dialog">
+    <form className={modalClass} tabIndex="-1" role="dialog" onSubmit={handleSubmit} disabled={watch}>
       <div className="modal-dialog" role="document">
         <div className="modal-content">
           <div className="form-group">
             <input
               type="text"
               className="form-control"
+              name="title"
               value={name}
+              onChange={handleInput}
               disabled={watch}
+              required
             />
             <textarea
               className="form-control rounded-3"
               rows="15"
+              name="text"
               value={text}
+              onChange={handleInput}
               disabled={watch}
+              required
             />
           </div>
           <div className="modal-footer">
-            <button type="button" className="btn btn-secondary" data-dismiss="modal">Close</button>
             <button
               type="button"
+              className="btn btn-secondary"
+              data-dismiss="modal"
+              onClick={closeNote}
+            >
+              Close
+            </button>
+            <button
+              type="submit"
               className="btn btn-primary"
               disabled={watch}
             >
@@ -36,7 +50,7 @@ function Modal(props) {
           </div>
         </div>
       </div>
-    </div>
+    </form>
   );
 }
 
@@ -45,6 +59,9 @@ Modal.propTypes = {
   watch: PropTypes.bool.isRequired,
   name: PropTypes.string.isRequired,
   text: PropTypes.string.isRequired,
+  handleInput: PropTypes.func.isRequired,
+  handleSubmit: PropTypes.func.isRequired,
+  closeNote: PropTypes.func.isRequired,
 };
 
 
