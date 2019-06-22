@@ -3,7 +3,7 @@ import PropTypes from 'prop-types';
 
 function Modal(props) {
   const {
-    show, watch, name, text,
+    show, watch, name, text, tag,
     closeNote, handleInput, handleSubmit,
   } = props;
   const modalClass = show ? 'modal show' : 'modal fade';
@@ -21,15 +21,17 @@ function Modal(props) {
               disabled={watch}
               required
             />
-            <textarea
-              className="form-control rounded-3"
-              rows="15"
-              name="text"
-              value={text}
-              onChange={handleInput}
-              disabled={watch}
-              required
-            />
+            { !tag && (
+              <textarea
+                className="form-control rounded-3"
+                rows="15"
+                name="text"
+                value={text}
+                onChange={handleInput}
+                disabled={watch}
+                required
+              />
+            )}
           </div>
           <div className="modal-footer">
             <button
@@ -57,6 +59,7 @@ function Modal(props) {
 Modal.propTypes = {
   show: PropTypes.bool.isRequired,
   watch: PropTypes.bool.isRequired,
+  tag: PropTypes.bool.isRequired,
   name: PropTypes.string.isRequired,
   text: PropTypes.string.isRequired,
   handleInput: PropTypes.func.isRequired,

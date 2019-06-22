@@ -11,6 +11,7 @@ class App extends Component {
     watchMode: false,
     nameNote: '',
     textNote: '',
+    tag: false,
     notes: [
     ],
   }
@@ -51,6 +52,7 @@ class App extends Component {
       showModal: false,
       nameNote: '',
       textNote: '',
+      tag: false,
     });
   }
 
@@ -71,19 +73,39 @@ class App extends Component {
   handleSubmit = (event) => {
     event.preventDefault();
     const {
-      notes, showId, nameNote, textNote,
+      notes, showId, nameNote, textNote, tag,
     } = this.state;
-    const tagsArr = textNote.match(/#[A-Za-zА-Яа-я-]+/g) || [];
-    const tags = tagsArr.map(item => item.slice(1));
-    const note = {
-      name: nameNote,
-      text: textNote,
-      tags,
-    };
+    let newTags = [];
+    let note = {};
+    if (!tag) {
+      const tagsArr = textNote.match(/#[A-Za-zА-Яа-я-]+/g) || [];
+      let tags = [];
+      if (showId < notes.length) tags = notes[showId].tags;
+      newTags = [...tagsArr.map(item => item.slice(1)), ...tags];
+      const newSet = new Set(newTags);
+      note = {
+        name: nameNote,
+        text: textNote,
+        tags: Array.from(newSet),
+      };
+    } else {
+      const { tags, text } = notes[showId];      
+      if (tags.indexOf(nameNote) === -1) {
+        newTags = [...tags, nameNote];
+      } else {
+        newTags = [...tags];
+      }
+      note = {
+        name: nameNote,
+        text,
+        tags: newTags,
+      };
+    }
     const array = [...notes.slice(0, showId), note, ...notes.slice(showId + 1)];
     this.setState({
       showModal: false,
       notes: array,
+      tag: false,
     });
   }
 
@@ -105,10 +127,22 @@ class App extends Component {
     });
   }
 
+  showTagInput = (event) => {
+    const { id } = event.target;
+    this.setState({
+      showModal: true,
+      watchMode: false,
+      showId: parseInt(id, 10),
+      nameNote: '',
+      textNote: '',
+      tag: true,
+    });
+  }
+
   render() {
     const {
       notes, showModal, watchMode,
-      textNote, nameNote,
+      textNote, nameNote, tag,
     } = this.state;
     return (
       <div className="app">
@@ -126,6 +160,7 @@ class App extends Component {
                 deleteNote={this.deleteNote}
                 showNote={this.showNote}
                 removeTag={this.removeTag}
+                showTagInput={this.showTagInput}
               />
             );
           })
@@ -138,6 +173,7 @@ class App extends Component {
           handleInput={this.handleInput}
           handleSubmit={this.handleSubmit}
           closeNote={this.closeNote}
+          tag={tag}
         />
       </div>
     );

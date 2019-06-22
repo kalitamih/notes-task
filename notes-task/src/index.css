@@ -36,4 +36,5 @@
 .app .modal.show textarea {
   margin: 10px;
   width: 97%;
+  height: 200px;
 }

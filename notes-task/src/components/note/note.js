@@ -3,7 +3,7 @@ import PropTypes from 'prop-types';
 
 function Note(props) {
   const {
-    name, id, tags,
+    name, id, tags, showTagInput,
     deleteNote, showNote, removeTag,
   } = props;
   return (
@@ -55,16 +55,21 @@ function Note(props) {
                 <i
                   className="fa fa-times-circle"
                   name={index}
-                  onClick={() => removeTag(id, index)}                  
+                  onClick={() => removeTag(id, index)}
                 />
               </span>
             );
           })
         }
-        <span className="badge badge-pill badge-primary">
+        <button
+          className="badge badge-pill badge-primary"
+          type="button"
+          id={id}
+          onClick={showTagInput}
+        >
           Add tag
           &nbsp;
-        </span>
+        </button>
       </div>
     </div>
   );
@@ -77,6 +82,7 @@ Note.propTypes = {
   deleteNote: PropTypes.func.isRequired,
   showNote: PropTypes.func.isRequired,
   removeTag: PropTypes.func.isRequired,
+  showTagInput: PropTypes.func.isRequired,
 };
 
 export default Note;
