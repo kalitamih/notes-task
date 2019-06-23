@@ -6,6 +6,7 @@ import AddNew from './components/addNew';
 
 class App extends Component {
   state = {
+    search: '',
     showModal: false,
     showId: 0,
     watchMode: false,
@@ -14,6 +15,36 @@ class App extends Component {
     tag: false,
     notes: [
     ],
+  }
+
+  componentDidMount() {
+    fetch('http://localhost:3001/data')
+      .then(response => response.json())
+      .then((data) => {
+        const { notes } = data[0];
+        this.setState({
+          notes,
+        });
+      })
+      .catch((err) => {
+        console.log(`Saved data wasn't fetched. ${err}`);
+      });
+  }
+
+  componentDidUpdate(prevProps, prevState) {
+    const { notes } = this.state;
+    if (prevState.notes !== notes) {
+      fetch('http://localhost:3001/data/1', {
+        headers: {
+          Accept: 'application/json',
+          'Content-Type': 'application/json',
+        },
+        method: 'PUT',
+        body: JSON.stringify({
+          notes,
+        }),
+      });
+    }
   }
 
   deleteNote = (event) => {
@@ -70,6 +101,13 @@ class App extends Component {
     }
   }
 
+  handleSearch = (event) => {
+    const { value } = event.target;
+    this.setState({
+      search: value,
+    });
+  }
+
   handleSubmit = (event) => {
     event.preventDefault();
     const {
@@ -89,7 +127,7 @@ class App extends Component {
         tags: Array.from(newSet),
       };
     } else {
-      const { tags, text } = notes[showId];      
+      const { tags, text } = notes[showId];
       if (tags.indexOf(nameNote) === -1) {
         newTags = [...tags, nameNote];
       } else {
@@ -112,10 +150,7 @@ class App extends Component {
   removeTag = (id, index) => {
     const { notes } = this.state;
     const { tags } = notes[parseInt(id, 10)];
-    console.log(index);
     const newtags = tags.filter((item, num) => !(num === parseInt(index, 10)));
-    console.log(tags);
-    console.log(newtags);
     const note = {
       name: notes[parseInt(id, 10)].name,
       text: notes[parseInt(id, 10)].text,
@@ -141,15 +176,20 @@ class App extends Component {
 
   render() {
     const {
-      notes, showModal, watchMode,
-      textNote, nameNote, tag,
+      notes, showModal, watchMode, showId,
+      textNote, nameNote, tag, search,
     } = this.state;
+    const re = new RegExp(search.trim(), 'g');
+    const filteredNotes = notes.map(item => re.test(item.tags.join('#')));
+    const viewNotes = notes.filter((item, index) => filteredNotes[index]);
+    let tags = [];
+    if (showId < notes.length) tags = notes[showId].tags;
     return (
       <div className="app">
-        <Search />
+        <Search handleSearch={this.handleSearch} search={search} />
         <AddNew id={notes.length} showNote={this.showNote} />
         {
-          notes.map((item, index) => {
+          viewNotes.map((item, index) => {
             const key = `note-${index}`;
             return (
               <Note
@@ -174,6 +214,7 @@ class App extends Component {
           handleSubmit={this.handleSubmit}
           closeNote={this.closeNote}
           tag={tag}
+          tags={tags}
         />
       </div>
     );
