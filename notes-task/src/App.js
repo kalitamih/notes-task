@@ -4,6 +4,7 @@ import Note from './components/note';
 import Modal from './components/modal';
 import AddNew from './components/addNew';
 import Loader from './components/loader';
+import LINK from './constants';
 
 class App extends Component {
   state = {
@@ -20,7 +21,7 @@ class App extends Component {
   }
 
   componentDidMount() {
-    fetch('http://localhost:3001/data')
+    fetch(LINK)
       .then(response => response.json())
       .then((data) => {
         const { notes } = data[0];
@@ -40,7 +41,7 @@ class App extends Component {
   componentDidUpdate(prevProps, prevState) {
     const { notes } = this.state;
     if (prevState.notes !== notes) {
-      fetch('http://localhost:3001/data/1', {
+      fetch(`${LINK}/1`, {
         headers: {
           Accept: 'application/json',
           'Content-Type': 'application/json',
@@ -186,9 +187,8 @@ class App extends Component {
       notes, showModal, watchMode, showId,
       textNote, nameNote, tag, search, loading,
     } = this.state;
-    const re = new RegExp(search.trim(), 'g');
-    const filteredNotes = notes.map(item => re.test(item.tags.join('#')));
-    const viewNotes = notes.filter((item, index) => filteredNotes[index]);
+    const filteredNotes = notes.map(item => item.tags.join('#').indexOf(search.trim()));
+    const viewNotes = notes.filter((item, index) => filteredNotes[index] > -1);
     const tags = (showId < notes.length) ? notes[showId].tags : [];
     return (
       <div className="app">
