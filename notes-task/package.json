@@ -2,6 +2,7 @@
   "name": "notes-task",
   "version": "0.1.0",
   "private": true,
+  "homepage": "https://kalitamih.github.io/notes-task/",
   "dependencies": {
     "@fortawesome/fontawesome-svg-core": "^1.2.19",
     "bootstrap": "^4.3.1",
@@ -15,6 +16,8 @@
   "scripts": {
     "start": "react-scripts start",
     "build": "react-scripts build",
+    "predeploy": "npm run build",
+    "deploy": "gh-pages -d build",
     "test": "react-scripts test",
     "eject": "react-scripts eject",
     "watch-less": "less-watch-compiler ./src/ ./src/ index.less",
@@ -37,6 +40,7 @@
   },
   "devDependencies": {
     "eslint-config-airbnb": "^17.1.0",
+    "gh-pages": "^2.0.1",
     "json-server": "^0.15.0",
     "less": "^3.9.0",
     "less-watch-compiler": "^1.13.0"
