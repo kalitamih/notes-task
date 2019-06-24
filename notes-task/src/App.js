@@ -3,6 +3,7 @@ import Search from './components/search';
 import Note from './components/note';
 import Modal from './components/modal';
 import AddNew from './components/addNew';
+import Loader from './components/loader';
 
 class App extends Component {
   state = {
@@ -15,6 +16,7 @@ class App extends Component {
     tag: false,
     notes: [
     ],
+    loading: true,
   }
 
   componentDidMount() {
@@ -24,9 +26,13 @@ class App extends Component {
         const { notes } = data[0];
         this.setState({
           notes,
+          loading: false,
         });
       })
       .catch((err) => {
+        this.setState({
+          loading: false,
+        });
         console.log(`Saved data wasn't fetched. ${err}`);
       });
   }
@@ -108,37 +114,38 @@ class App extends Component {
     });
   }
 
+  addNote = () => {
+    const {
+      notes, showId, nameNote, textNote,
+    } = this.state;
+    const tagsArr = textNote.match(/#[A-Za-zА-Яа-я-]+/g) || [];
+    const prevTags = showId < notes.length ? notes[showId].tags : [];
+    const newTags = [...tagsArr.map(item => item.slice(1)), ...prevTags];
+    const newSet = new Set(newTags);
+    const note = {
+      name: nameNote,
+      text: textNote,
+      tags: Array.from(newSet),
+    };
+    return note;
+  }
+
+  addTag = () => {
+    const { notes, showId, nameNote } = this.state;
+    const { tags, text, name } = notes[showId];
+    const newTags = (tags.indexOf(nameNote) === -1) ? [...tags, nameNote] : [...tags];
+    const note = {
+      name,
+      text,
+      tags: newTags,
+    };
+    return note;
+  }
+
   handleSubmit = (event) => {
     event.preventDefault();
-    const {
-      notes, showId, nameNote, textNote, tag,
-    } = this.state;
-    let newTags = [];
-    let note = {};
-    if (!tag) {
-      const tagsArr = textNote.match(/#[A-Za-zА-Яа-я-]+/g) || [];
-      let tags = [];
-      if (showId < notes.length) tags = notes[showId].tags;
-      newTags = [...tagsArr.map(item => item.slice(1)), ...tags];
-      const newSet = new Set(newTags);
-      note = {
-        name: nameNote,
-        text: textNote,
-        tags: Array.from(newSet),
-      };
-    } else {
-      const { tags, text } = notes[showId];
-      if (tags.indexOf(nameNote) === -1) {
-        newTags = [...tags, nameNote];
-      } else {
-        newTags = [...tags];
-      }
-      note = {
-        name: nameNote,
-        text,
-        tags: newTags,
-      };
-    }
+    const { notes, showId, tag } = this.state;
+    const note = tag ? this.addTag() : this.addNote();
     const array = [...notes.slice(0, showId), note, ...notes.slice(showId + 1)];
     this.setState({
       showModal: false,
@@ -177,19 +184,21 @@ class App extends Component {
   render() {
     const {
       notes, showModal, watchMode, showId,
-      textNote, nameNote, tag, search,
+      textNote, nameNote, tag, search, loading,
     } = this.state;
     const re = new RegExp(search.trim(), 'g');
     const filteredNotes = notes.map(item => re.test(item.tags.join('#')));
     const viewNotes = notes.filter((item, index) => filteredNotes[index]);
-    let tags = [];
-    if (showId < notes.length) tags = notes[showId].tags;
+    const tags = (showId < notes.length) ? notes[showId].tags : [];
     return (
       <div className="app">
         <Search handleSearch={this.handleSearch} search={search} />
         <AddNew id={notes.length} showNote={this.showNote} />
         {
-          viewNotes.map((item, index) => {
+          loading && <Loader />
+        }
+        {
+          !loading && viewNotes.map((item, index) => {
             const key = `note-${index}`;
             return (
               <Note

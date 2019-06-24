@@ -7,10 +7,10 @@ function Search(props) {
     <form>
       <div className="form-group search">
         <input
-          type="text"
+          type="search"
           className="form-control"
           value={search}
-          placeholder="Enter new note"
+          placeholder="Enter filter for notes"
           onChange={handleSearch}
         />
       </div>

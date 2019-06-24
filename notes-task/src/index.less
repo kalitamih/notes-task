@@ -1,107 +1,165 @@
-*, *::before, *::after {
-  box-sizing: border-box;
-}
-
 .app {
-
-  .search {
-    width: 40%;
-    margin: 5% auto 2%;
+  // GENERAL AND MIXINS
+  *, *::before, *::after {
+    box-sizing: border-box;
+  }
+  .text-in-textarea() {
+    font: 16px 'Open Sans', sans-serif;
+    letter-spacing: 1px;
+  }
+  .note-style() {
+    display: flex;    
+    width: 340px;
+    margin: 5px auto; 
+    margin-bottom: 0;      
+    span {
+      margin: 5px;
+    }
+  }
+  .textare-size() {
+    width: 300px;
+    height: 180px; 
   }
 
+  .tag-btn() {
+    display: flex;   
+    align-items: center;
+    justify-content: center;    
+    height: 25px;
+    margin: 5px;
+    padding: 0 5px;
+    font-size: 1em; 
+  }
+
+  .spinner-border {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+  }
+
+  // Search
+  .search {
+    width: 300px;
+    margin: 40px auto;
+  }
+
+  // Add new button
   .add-new {
     display: block;
     margin: 0 auto;    
   }
 
+  // Note
   .name {
-    margin: 3% auto;
+    margin: 25px auto;
     .item {
-      display: flex;
-      width: 40%;
-      margin: 1% auto; 
-      margin-bottom: 0;       
+      .note-style();
       .note-name {
-        width: 60%;    
+        width: 100%;  
+        font-size: 16px;
+        margin-bottom: 10px;  
       }
-      .note-watch {
-        width: 10%;
-        margin-left: 3%;
+      .note-btn {
+        width: 50px;
+        margin-left: 5px;
+        margin-bottom: 10px; 
       }
       button {
         .fa {
-          font-size: 1em !important; /*size whatever you like*/
+          font-size: 1.5em; 
+        }
+      } 
+    }
+
+    .tags {
+      .note-style();
+      flex-wrap: wrap;
+      div {
+        .tag-btn();
+        border: solid 1px #5bc0de;
+        border-radius: 5px;
+        button {         
+          height: 20px;
+          width: 17px;
+          padding: 0;          
+          vertical-align: middle;
+          border: transparent;
+          .fa {
+            margin: 0;
+            font-size: 1em; 
+          }
         }
       }
-      span {
-        margin-right: 1%;         
+      button {
+        .tag-btn();
       }
-
     }
   }
 
-  .modal {    
+  //Modal window
+  .modal { 
+    .modal-content {
+      margin: 20px auto;
+      width: 340px;
+      border: solid 2px black;
+      border-radius: 5px;
+    }
     &.show {
       display: block;
       top: 20%;
       input {
-        margin: 10px;
-        width: 97%;
-      }
-      .container, .backdrop, textarea {
-        width: 460px;
-        height: 180px;
-      }
-
-      .highlights, textarea {
-        padding: 10px;
-        font: 20px/28px 'Open Sans', sans-serif;
-        letter-spacing: 1px;
+        margin: 10px auto;
+        width: 300px;
       }
 
       .container {
-        display: block;
-        margin: 0 auto;
-        transform: translateZ(0);
-        -webkit-text-size-adjust: none;
-      }
+        .textare-size(); 
+        display: block;       
+        margin-left: 3px;
+        border-radius: 5px;
 
-      .backdrop {
-        position: absolute;
-        z-index: 1;
-        border: 2px solid #685972;
-        background-color: #fff;
-        overflow: auto;
-        pointer-events: none;
-        transition: transform 1s;
-      }
+        .backdrop {
+          .textare-size(); 
+          position: absolute;
+          z-index: 1;
+          border: 2px solid #685972;
+          background-color: #ffffff;
+          overflow: auto;
+          pointer-events: none;
+          transition: transform 1s;
+          .highlights {             
+            .text-in-textarea();
+            white-space: pre-wrap;
+            word-wrap: break-word;
+            color: transparent; 
+            padding: 10px;
+            mark {
+              .text-in-textarea();
+              padding: 0;
+              border-radius: 3px;       
+              background-color: #b1d5e5;
+              color: transparent;
+            }        
+          }
+        }
 
-      .highlights {
-          white-space: pre-wrap;
-          word-wrap: break-word;
-          color: transparent;
+        textarea {     
+          .textare-size();      
+          .text-in-textarea(); 
+          position: absolute;
+          z-index: 2;
+          margin: 0;
+          padding: 10px;
+          border: 2px solid #74637f;
+          border-radius: 0;
+          color: #444444;
+          background-color: transparent;
+          overflow: auto;
+          resize: none;
+          transition: transform 1s;
+        }
       }
-
-      textarea {
-        display: block;
-        position: absolute;
-        z-index: 2;
-        margin: 0;
-        border: 2px solid #74637f;
-        border-radius: 0;
-        color: #444;
-        background-color: transparent;
-        overflow: auto;
-        resize: none;
-        transition: transform 1s;
-      }
-
-      mark {
-        border-radius: 3px;
-        color: transparent;
-        background-color: #b1d5e5;
-      }
-
     }
   }
 }

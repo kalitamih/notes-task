@@ -11,14 +11,14 @@ function Note(props) {
       <div className="item">
         <button
           type="button"
-          className="btn btn-primary btn-lg note-name"
+          className="btn btn-outline-secondary btn-lg note-name"
           disabled
         >
           {name}
         </button>
         <button
           type="button"
-          className="btn btn-primary btn-lg note-watch"
+          className="btn btn-outline-success btn-sm note-btn"
           name="watch"
           id={id}
           onClick={event => showNote(event, true)}
@@ -27,7 +27,7 @@ function Note(props) {
         </button>
         <button
           type="button"
-          className="btn btn-primary btn-lg note-watch"
+          className="btn btn-outline-primary btn-sm note-btn"
           name="edit"
           id={id}
           onClick={event => showNote(event, false)}
@@ -36,39 +36,44 @@ function Note(props) {
         </button>
         <button
           type="button"
-          className="btn btn-primary btn-lg note-watch"
+          className="btn btn-outline-danger btn-sm note-btn"
           name="trash"
           id={id}
           onClick={deleteNote}
         >
-          <i className="fa fa-trash" id={id} />
+          <i className="fa fa-trash-o" id={id} />
         </button>
       </div>
-      <div className="item">
+      <div className="tags">
         {
           tags.map((item, index) => {
             const key = `tag-${id}-${index}`;
             return (
-              <span className="badge badge-pill badge-primary" key={key}>
+              <div key={key}>
                 {item}
                 &nbsp;
-                <i
-                  className="fa fa-times-circle"
+                <button
+                  type="button"
+                  className="btn btn-outline-danger btn-sm note-btn"
                   name={index}
                   onClick={() => removeTag(id, index)}
-                />
-              </span>
+                >
+                  <i
+                    className="fa fa-times-circle"
+                    name={index}
+                  />
+                </button>
+              </div>
             );
           })
         }
         <button
-          className="badge badge-pill badge-primary"
+          className="btn btn-outline-info badge"
           type="button"
           id={id}
           onClick={showTagInput}
         >
-          Add tag
-          &nbsp;
+          <i className="fa fa-plus" id={id} />
         </button>
       </div>
     </div>

@@ -30,17 +30,19 @@ class Modal extends Component {
     const modalClass = show ? 'modal show' : 'modal fade';
     const string = tags.join('|');
     const re = new RegExp(string, 'g');
-    const divText = text.replace(/\n$/g, '\n\n').replace(re, '<mark>$&</mark>');
+    const divText = text.replace(re, '<mark>$&</mark>');
+    const placeholder = tag ? 'Add new tag' : 'Add title of new note';
     return (
       <form className={modalClass} tabIndex="-1" role="dialog" onSubmit={handleSubmit} disabled={watch}>
         <div className="modal-dialog" role="document">
           <div className="modal-content">
             <div className="form-group">
               <input
-                type="text"                
-                maxLength="30"
+                type="text"
+                maxLength="20"
                 className="form-control"
                 name="title"
+                placeholder={placeholder}
                 value={name}
                 onChange={handleInput}
                 disabled={watch}
@@ -56,10 +58,9 @@ class Modal extends Component {
                     </div>
                   )}
                   <textarea
-                    className="form-control rounded-3"
-                    rows="15"
                     name="text"
                     value={text}
+                    placeholder="Add text of your note"
                     onChange={handleInput}
                     onScroll={this.handleScroll}
                     disabled={watch}
@@ -71,7 +72,7 @@ class Modal extends Component {
             <div className="modal-footer">
               <button
                 type="button"
-                className="btn btn-secondary"
+                className="btn btn-sm btn-secondary"
                 data-dismiss="modal"
                 onClick={closeNote}
               >
@@ -79,10 +80,10 @@ class Modal extends Component {
               </button>
               <button
                 type="submit"
-                className="btn btn-primary"
+                className="btn btn-sm btn-primary"
                 disabled={watch}
               >
-                Save changes
+                Save
               </button>
             </div>
           </div>
